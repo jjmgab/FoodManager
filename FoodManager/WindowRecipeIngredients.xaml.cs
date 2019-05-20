@@ -1,17 +1,7 @@
 ﻿using FoodManager.DatabaseModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace FoodManager
 {
@@ -20,16 +10,28 @@ namespace FoodManager
     /// </summary>
     public partial class WindowRecipeIngredients : Window
     {
+        /// <summary>
+        /// List of target recipe igredients
+        /// </summary>
         public List<RecipeIngredient> RecipeIngredients { get; } = new List<RecipeIngredient>();
 
+        /// <summary>
+        /// List of all ingredients
+        /// </summary>
         private List<Ingredient> allIngredients;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public WindowRecipeIngredients()
         {
             InitializeComponent();
             RefreshIngredientList();
         }
 
+        /// <summary>
+        /// Refresh list of ingredients in the source list
+        /// </summary>
         private void RefreshIngredientList()
         {
             allIngredients = DatabaseHelper.GetListOfModels(Ingredient.Create, Ingredient.QuerySelectAll).OrderBy(x => x.IngredientCategoryId).ThenBy(x => x.Name).ToList();
@@ -46,6 +48,11 @@ namespace FoodManager
             }
         }
 
+        /// <summary>
+        /// Move an ingredient from the source list to the target list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonMoveRight_Click(object sender, RoutedEventArgs e)
         {
             if (!listBoxSource.Items.IsEmpty && listBoxSource.SelectedItem != null)
@@ -69,6 +76,11 @@ namespace FoodManager
             }
         }
 
+        /// <summary>
+        /// Accept changes and add ingredients to the target list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonAccept_Click(object sender, RoutedEventArgs e)
         {
             foreach (RecipeIngredient item in listBoxTarget.Items)
@@ -79,12 +91,22 @@ namespace FoodManager
             this.Close();
         }
 
+        /// <summary>
+        /// Discard changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
             this.Close();
         }
 
+        /// <summary>
+        /// Move an ingredient from the target list back to the source list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonMoveLeft_Click(object sender, RoutedEventArgs e)
         {
             if (!listBoxTarget.Items.IsEmpty && listBoxTarget.SelectedItem != null)
@@ -96,6 +118,11 @@ namespace FoodManager
             }
         }
 
+        /// <summary>
+        /// Open a window to add a new ingredient
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonAddNewIngredient_Click(object sender, RoutedEventArgs e)
         {
             WindowAddIngredient window = new WindowAddIngredient();
